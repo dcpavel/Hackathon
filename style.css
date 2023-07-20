@@ -1,11 +1,42 @@
+body {
+  cursor: none;
+}
+
+.broken_glass, .ana_cat {
+  position: absolute;
+  z-index: 500;
+  width: 180px;
+  height: 124px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+.rip {
+  position: absolute;
+  z-index: 500;
+  background-color: black;
+  height: 10px;
+  width: 10px;
+  border-radius: 2px;
+}
+
 #cursor {
+  position: absolute;
+  width: 128px;
+  height: 146px;
+  z-index: 9001;
   background-repeat: no-repeat;
   background-size: auto;
 }
 
-.broken_glass {
-  /* background-image: ('chrome-extension://__MSG_@@extension_id__/assets/broken_glass.png'); */
-  width: 180px;
-  height: 124px;
-  /* background-color: white; */
+#toolbox {
+  position: absolute;
+  border: 1px solid darkred;
+  background-color: darkred;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 450px;
+  z-index: 900;
 }

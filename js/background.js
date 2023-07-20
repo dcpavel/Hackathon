@@ -26,7 +26,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
       await chrome.scripting.executeScript({
         target: {tabId: tab.id},
-        files: ["js/script.js"]
+        files: ["js/actions.js", "js/script.js"]
       })
     } else if (nextState === "OFF") {
       // Remove the CSS file when the user turns the extension off
