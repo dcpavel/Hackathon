@@ -203,18 +203,10 @@ const rotate = (e, ele) => {
 }
 
 const size = (e, ele) => {
-  rot += /[d+]deg/.test(ele.style.transform);
-
   if (e.button === 0) {
-    rot += 30;
-    ele.style.transform = `rotate(${rot}deg)`;
-
     ele.width = ele.width * 1.25;
     ele.height = ele.height * 1.25;
   } else if (e.button === 2) {
-    rot -= 30;
-    ele.style.transform = `rotate(${rot}deg)`;
-    
     ele.width = ele.width * .75;
     ele.height = ele.height * .75;
   }
