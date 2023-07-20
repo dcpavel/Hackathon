@@ -1,0 +1,11 @@
+#cursor {
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.broken_glass {
+  /* background-image: ('chrome-extension://__MSG_@@extension_id__/assets/broken_glass.png'); */
+  width: 180px;
+  height: 124px;
+  /* background-color: white; */
+}
