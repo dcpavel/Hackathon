@@ -4,6 +4,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+const jsFiles = [ "js/action.js" ];
+
+// push this on at the end to ensure it is the last file
+// this file holds the functionality
+jsFiles.push("js/script.js");
 
 chrome.action.onClicked.addListener(async (tab) => {
     // Retrieve the action badge to check if the extension is 'ON' or 'OFF'
@@ -26,7 +31,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
       await chrome.scripting.executeScript({
         target: {tabId: tab.id},
-        files: [ "js/script.js"]
+        files: jsFiles
       })
     } else if (nextState === "OFF") {
       // Remove the CSS file when the user turns the extension off
