@@ -1,19 +1,17 @@
 const body = document.querySelector('body');
-const images = ["assets/thor_hammer.png", "assets/chainsaw.png", 'assets/wrench.png',
-  'assets/jackhammer.png', 'assets/paintbrush.png', 'assets/screwdriver.png', 'assets/beer.png'];
-// assets/beer.png must be last for the easter egg to work
 const runtime = chrome.runtime;
 
-let mouseY = 0;
-let mouseX = 0;
-let zIndex = 500;
-let rot = 30;
 
-let action = 0;
-let stopChainsaw = null;
-let sawOn = false;
+const objInfo = (x, y) => {
+  x,
+  y,
+  rot = 0,
+  size = changeSize
+  const zIndex = 500;
+};
 
-const moveCursor = (e) => {
+
+const moveCursor = (e, cursorDiv) => {
   mouseY = e.clientY;
   mouseX = e.clientX;
 
@@ -22,36 +20,36 @@ const moveCursor = (e) => {
 
 const interact = (e) => {
   switch (action) {
-    case 0:
-      hammer();
+    case 'hammer':
+      actions.hammer();
       break;
-    case 1:
+    case 'chainsaw':
       if (sawOn) {
         clearInterval(stopChainsaw);
       } else {
-        stopChainsaw = setInterval(chainsaw, 1);
+        stopChainsaw = setInterval(actions.chainsaw, 1);
       }
       sawOn = !sawOn;
       break;
-    case 2:
-      wrench(e);
+    case 'wrench':
+      actions.wrench(e, cursorDiv);
       break;
-    case 3:
-      jackhammer();
+    case 'jackhammer':
+      actions.jackhammer(cursorDiv);
       break;
-    case 4:
-      paintbrush();
+    case 'paintbrush':
+      actions.paintbrush();
       break;
-    case 5:
-      screwdriver(e);
+    case 'screwdriver':
+      actions.screwdriver(e, cursorDiv);
       break;
-    case 6:
-      egg();
+    case 'secret':
+      actions.egg();
       break;
   }
 }
 
-const changeAction = (event) => {
+const changeAction = (event, action = 'hammer') => {
   if (/^[A-Z]$/.test(event.key)) event.key = event.key.toStringLower();
   console.log(event.key);
   switch (event.key) {
@@ -65,27 +63,26 @@ const changeAction = (event) => {
     case 'a':
       action = prevAction();
       break;
-    case 'w':
-      action = 2;
-      break;
     case 'h':
-      action = 0;
+      action = 'hammer';
       break;
-    case 's':
     case 'c':
-      action = 1;
+      action = 'chainsaw';
+      break;
+    case 'w':
+      action = 'wrench';
       break;
     case 'j':
-      action = 3;
+      action = 'jackhammer';
       break;
     case 'p':
-      action = 4;
+      action = 'paintbrush';
       break;
     case 's':
-      action = 5;
+      action = 'screwdriver';
       break;
     case 'e':
-      action = 6;
+      action = 'secret';
       break;
     default:
       console.log(event);  
@@ -97,98 +94,6 @@ const changeAction = (event) => {
   sawOn = false;
 }
 
-const hammer = () => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  const imageUrl = runtime.getURL("assets/broken_glass.png");
-
-  const broken = document.createElement('div');
-  broken.className = 'broken_glass';
-  broken.style.top = mouseY - yOffset + 'px';
-  broken.style.left = mouseX - xOffset + 'px';
-  broken.style.backgroundImage = `url(${imageUrl})`;
-
-  body.appendChild(broken);
-}
-
-const chainsaw = () => {
-  const xOffset = 25;
-  const yOffset = 62;
-
-  const rip = document.createElement('div');
-  rip.className = 'rip';
-  rip.style.top = mouseY + yOffset + 'px';
-  rip.style.left = mouseX + xOffset + 'px';
-  rip.style.zIndex = zIndex++;
-
-  body.appendChild(rip);
-}
-
-const wrench = (e) => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  cursorDiv.remove();
-  const ele = document.elementFromPoint(mouseX, mouseY);
-  ele.style.transitionDuration = '.5s';
-  rotate(e, ele);  
-  body.prepend(cursorDiv);
-}
-
-const jackhammer = () => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  cursorDiv.remove();
-  const ele = document.elementFromPoint(mouseX, mouseY);
-  if (ele != body) {
-    ele.remove();
-  }
-  body.prepend(cursorDiv);
-}
-
-const paintbrush = () => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  const imageUrl = runtime.getURL("assets/AnaCat.jpg");
-
-  const anaCat = document.createElement('div');
-  anaCat.className = 'ana_cat';
-  anaCat.style.top = mouseY - yOffset + 'px';
-  anaCat.style.left = mouseX - xOffset + 'px';
-  anaCat.style.backgroundImage = `url(${imageUrl})`;
-
-  body.appendChild(anaCat);
-}
-
-const screwdriver = (e) => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  cursorDiv.remove();
-  const ele = document.elementFromPoint(mouseX, mouseY);
-  ele.style.transitionDuration = `.5s`;
-  rotate(e, ele);
-  size(e, ele);
-  body.prepend(cursorDiv);
-}
-
-const egg = () => {
-  const xOffset = 90;
-  const yOffset = 62;
-
-  const imageUrl = runtime.getURL("assets/alisa.jpg");
-
-  const anaCat = document.createElement('div');
-  anaCat.className = 'ana_cat';
-  anaCat.style.top = mouseY - yOffset + 'px';
-  anaCat.style.left = mouseX - xOffset + 'px';
-  anaCat.style.backgroundImage = `url(${imageUrl})`;
-
-  body.appendChild(anaCat);
-}
 
 const rotate = (e, ele) => {
   rot += /[d+]deg/.test(ele.style.transform);
@@ -202,11 +107,11 @@ const rotate = (e, ele) => {
   }
 }
 
-const size = (e, ele) => {
-  if (e.button === 0) {
+const changeSize = (mouse, ele) => {
+  if (mouse.button === 0) {
     ele.width = ele.width * 1.25;
     ele.height = ele.height * 1.25;
-  } else if (e.button === 2) {
+  } else if (mouse.button === 2) {
     ele.width = ele.width * .75;
     ele.height = ele.height * .75;
   }
@@ -232,8 +137,7 @@ const prevAction = () => {
 }
 
 const setCursor = (images, i) => {
-  const cursorUrl = runtime.getURL(images[i]);
-  let cursorDiv = document.querySelector('#cursor');
+  const cursorUrl = runtime.getURL(actions[action]);
 
   if (!cursorDiv) {
     cursorDiv = document.createElement('div');
@@ -250,8 +154,15 @@ const identify = () => {
 }
 
 
-const cursorDiv = setCursor(images, action);
+let default_aaction = 'hammer';
+let mouseY = 0;
+let mouseX = 0;
+
+let cursorDiv = setCursor(images, action);
 body.prepend(cursorDiv);
+
+let stopChainsaw = null;
+let sawOn = false;
 
 body.addEventListener('mousemove', (e) => moveCursor(e));
 body.addEventListener('click', (e) => interact(e))
